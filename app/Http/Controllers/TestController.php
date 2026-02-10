@@ -31,7 +31,7 @@ public function soma(Request $request){
     
 
     
-    public function salva_time(Request $request){
+    public function salva_times(Request $request){
 
     $request->validate([
         'times'=>'required',
@@ -52,7 +52,7 @@ public function soma(Request $request){
 
         $data =[
             'msg' => 'time salvo',
-            'time' => $time
+            'times' => $time
         ];
 
         return response()->json($data,200);
@@ -69,7 +69,7 @@ public function soma(Request $request){
 
 
     
-    public function exibe_time($id){
+    public function exibe_times($id){
         $time = TimeModel::find($id);
 
          $data =[
