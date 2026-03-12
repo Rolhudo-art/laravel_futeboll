@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ArenaStats | Login</title>
+<title>ArenaStats | Registro</title>
 
 <style>
 
@@ -39,7 +39,7 @@ center/cover;
 z-index:-1;
 }
 
-.login-box{
+.register-box{
 background:rgba(0,0,0,0.8);
 padding:40px;
 border-radius:10px;
@@ -83,69 +83,89 @@ font-size:14px;
 color:var(--gray);
 }
 
+a{
+color:var(--primary);
+text-decoration:none;
+font-size:14px;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="hero-bg"></div>
 
-<div class="login-box">
+<div class="register-box">
 
 <div class="logo">ARENA<span>STATS</span></div>
 
+<input type="text" id="name" placeholder="Nome">
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="password" placeholder="Senha">
 
-<button onclick="login()">Entrar</button>
+<button onclick="register()">Criar Conta</button>
 
-<p id="msg"></p>
+<p class="message" id="mensagem"></p>
+
+<p style="margin-top:15px">
+Já possui conta?
+<a href="login.html">Entrar</a>
+</p>
 
 </div>
 
 <script>
 
-async function login(){
+async function register(){
 
+let name = document.getElementById("name").value
 let email = document.getElementById("email").value
 let password = document.getElementById("password").value
 
-let response = await fetch("/api/login",{
+try{
+
+let resposta = await fetch("http://127.0.0.1:8000/api/register",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
 "Accept":"application/json"
 },
 body:JSON.stringify({
+name:name,
 email:email,
 password:password
 })
 })
 
-let data = await response.json()
+let dados = await resposta.json()
 
-if(data.token){
+console.log(dados)
 
-localStorage.setItem("token",data.token)
+if(resposta.ok){
 
-document.getElementById("msg").innerText="Login realizado!"
+localStorage.setItem("token",dados.token)
 
-setTimeout(()=>{
-window.location.href="/dashboard"
-},500)
+document.getElementById("mensagem").innerText="Conta criada com sucesso!"
 
 }else{
 
-document.getElementById("msg").innerText="Login inválido"
+document.getElementById("mensagem").innerText="Erro no cadastro"
+
+}
+
+}catch(erro){
+
+console.error(erro)
+
+document.getElementById("mensagem").innerText="Erro ao conectar com servidor"
 
 }
 
 }
 
 </script>
-
-
-
 
 
 
